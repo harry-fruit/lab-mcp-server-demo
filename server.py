@@ -1,15 +1,18 @@
-# server.py
 from mcp.server.fastmcp import FastMCP
-from tools import add, subtract, say_hello
-from resources import get_greeting
 
-# Create an MCP server
-mcp = FastMCP("Demo")
+mcp = FastMCP(
+    name="Demo",
+    host="0.0.0.0",
+    port=8050
+)
 
-# Register tools
-mcp.tool()(add)
-mcp.tool()(subtract)
-mcp.tool()(say_hello)
-
-# Register resources
-mcp.resource("greeting://{name}")(get_greeting)
+if __name__ == "__main__":
+    transport = "stdio"
+    if transport == "stdio":
+        print("Running MCP server with stdio transport")
+        mcp.run(transport="stdio")
+    elif transport == "sse":
+        print("Running MCP server with SSE transport")
+        mcp.run(transport="sse")
+    else:
+        raise ValueError(f"Invalid transport: {transport}")
